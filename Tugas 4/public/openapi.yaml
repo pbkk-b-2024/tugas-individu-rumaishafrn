@@ -1,0 +1,604 @@
+openapi: 3.0.0
+info:
+  title: Laravel Apotek Api Documentation
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:8000
+paths:
+  /api/register:
+    post:
+      tags:
+        - Auth
+      summary: Register a new user
+      security: []
+      description: Endpoint to register a new user by providing necessary user details.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the user.
+                email:
+                  type: string
+                  description: The email address of the user.
+                  format: email
+                password:
+                  type: string
+                  description: The password for the user account.
+                  format: password
+              required:
+                - name
+                - email
+                - password
+      responses:
+        '201':
+          description: User created
+  /api/login:
+    post:
+      summary: User Login
+      security: []
+      tags:
+        - Auth
+      description: Allows a user to log in by providing their email and password.
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: admin@example.com
+                password:
+                  type: string
+                  example: '12345678'
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                  refreshToken:
+                    type: string
+                    example: d4f5e6g7h8i9j0k1l2m3n4o5p6q7r8s9...
+        '401':
+          description: Unauthorized, invalid credentials
+  /api/logout:
+    post:
+      summary: User Logout
+      description: Logout should invalidate the token used to authenticate the request.
+      tags:
+        - Auth
+      operationId: logoutUser
+      responses:
+        '200':
+          description: Successful logout
+      security:
+        - BearerAuth: []
+  /api/kategori:
+    get:
+      summary: Get All Kategori Obat
+      tags:
+        - Kategori
+      description: Get all kategori obat
+      operationId: getKategori
+      responses:
+        '200':
+          description: List of kategori obat
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Kategori_Obat'
+    post:
+      summary: Create Kategori Obat
+      tags:
+        - Kategori
+      description: Create kategori obat
+      operationId: createKategori
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kategori_Obat'
+      responses:
+        '201':
+          description: Kategori obat created
+  /api/kategori/{id}:
+    description: Get kategori obat by ID
+    get:
+      summary: Get Kategori Obat by ID
+      tags:
+        - Kategori
+      description: Get kategori obat by ID
+      operationId: getKategoriById
+      parameters:
+        - name: id
+          in: path
+          description: ID of the kategori obat
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Kategori obat by ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kategori_Obat'
+    put:
+      summary: Update Kategori Obat
+      tags:
+        - Kategori
+      description: Update kategori obat
+      operationId: updateKategori
+      parameters:
+        - name: id
+          in: path
+          description: ID of the kategori obat
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kategori_Obat'
+      responses:
+        '200':
+          description: Kategori obat updated
+    delete:
+      summary: Delete Kategori Obat
+      tags:
+        - Kategori
+      description: Delete kategori obat
+      operationId: deleteKategori
+      parameters:
+        - name: id
+          in: path
+          description: ID of the kategori obat
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Kategori obat deleted
+
+  /api/obat:
+    get:
+      summary: Get All Obat
+      security: []
+      tags:
+        - Obat
+      description: Get all obat
+      operationId: getObat
+      responses:
+        '200':
+          description: List of obat
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Obat'
+    post:
+      summary: Create Obat
+      tags:
+        - Obat
+      description: Create obat
+      operationId: createObat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Obat'
+      responses:
+        '201':
+          description: Obat created
+  /api/obat/{id}:
+    description: Get obat by ID
+    get:
+      summary: Get Obat by ID
+      tags:
+        - Obat
+      description: Get obat by ID
+      operationId: getObatById
+      parameters:
+        - name: id
+          in: path
+          description: ID of the obat
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Obat by ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Obat'
+    put:
+      summary: Update Obat
+      tags:
+        - Obat
+      description: Update obat
+      operationId: updateObat
+      parameters:
+        - name: id
+          in: path
+          description: ID of the obat
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Obat'
+      responses:
+        '200':
+          description: Obat updated
+    delete:
+      summary: Delete Obat
+      tags:
+        - Obat
+      description: Delete obat
+      operationId: deleteObat
+      parameters:
+        - name: id
+          in: path
+          description: ID of the obat
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Obat deleted
+
+  /api/stok:
+    get:
+      summary: Get All Obat With Stok
+      tags:
+        - Stok
+      description: Get all stok
+      operationId: getStok
+      responses:
+        '200':
+          description: List of stok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stok'
+  /api/stok/{id}:
+    description: Add stock by Obat ID
+    put:
+      summary: Add stock by Obat ID
+      tags:
+        - Stok
+      description: Add stock by Obat ID
+      operationId: addStokByObatId
+      parameters:
+        - name: id
+          in: path
+          description: ID of the obat
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Stok by ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stok'
+  /api/laporan_stok:
+    get:
+      summary: Get Laporan Stok
+      tags:
+        - Laporan Stok
+      description: Get laporan stok
+      operationId: getLaporanStok
+      responses:
+        '200':
+          description: List of laporan stok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stok'
+  /api/transaksi:
+    get:
+      summary: Get All Transaksi
+      tags:
+        - Transaksi
+      description: Get all transaksi
+      operationId: getTransaksi
+      responses:
+        '200':
+          description: List of transaksi
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaksi'
+    post:
+      summary: Create Transaksi Obat
+      tags:
+        - Transaksi
+      description: Create transaksi obat
+      operationId: createTransaksi
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                obat_id:
+                  type: integer
+                jumlah:
+                  type: integer
+              required:
+                - obat_id
+                - jumlah
+      responses:
+        '201':
+          description: Transaksi obat created
+  /api/transaksi/{id}:
+    description: Get transaksi by ID
+    get:
+      summary: Get Transaksi by ID
+      tags:
+        - Transaksi
+      description: Get transaksi by ID
+      operationId: getTransaksiById
+      parameters:
+        - name: id
+          in: path
+          description: ID of the transaksi
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Transaksi by ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaksi'
+  /api/transaksi/{id}/bukti:
+    description: Upload Bukti Pembayaran
+    post:
+      summary: Upload Bukti Pembayaran
+      tags:
+        - Transaksi
+      description: Upload bukti pembayaran kedalam tabel pembayaran
+      operationId: uploadBuktiPembayaran
+      parameters:
+        - name: id
+          in: path
+          description: ID of the transaksi
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                bukti_pembayaran:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Bukti pembayaran uploaded
+  /api/transaksi/{id}/confirm:
+    description: Confirm Transaksi
+    put:
+      summary: Confirm Transaksi
+      tags:
+        - Transaksi
+      description: Confirm transaksi
+      operationId: confirmTransaksi
+      parameters:
+        - name: id
+          in: path
+          description: ID of the transaksi
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Transaksi confirmed
+  /api/transaksi/{id}/reject:
+    description: Reject Transaksi
+    put:
+      summary: Reject Transaksi
+      tags:
+        - Transaksi
+      description: Reject transaksi
+      operationId: rejectTransaksi
+      parameters:
+        - name: id
+          in: path
+          description: ID of the transaksi
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Transaksi rejected
+  /api/pembayaran/{id}:
+    description: Get pembayaran by Transaksi ID
+    get:
+      summary: Get Bukti Pembayaran by Transaksi ID
+      tags:
+        - Bukti Pembayaran
+      description: Get Bukti pembayaran by Transaksi ID
+      operationId: getBuktiPembayaranByTransaksiId
+      parameters:
+        - name: id
+          in: path
+          description: ID of the Transaksi
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Bukti Pembayaran by Transaksi ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bukti_pembayaran:
+                    type: string
+  /api/laporan_penjualan:
+    get:
+      summary: Get Laporan Penjualan
+      tags:
+        - Laporan Penjualan
+      description: Get laporan penjualan
+      operationId: getLaporanPenjualan
+      responses:
+        '200':
+          description: List of laporan penjualan
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  transaksi_id:
+                    type: integer
+                  jumlah_penjualan:
+                    type: integer
+                  total_harga_penjualan:
+                    type: integer
+                  tanggal:
+                    type: string
+  /api/penerimaan_obat:
+    get:
+      summary: Get Penerimaan Obat
+      tags:
+        - Penerimaan Obat
+      description: Get penerimaan obat
+      operationId: getPenerimaanObat
+      responses:
+        '200':
+          description: List of penerimaan obat
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  user_id:
+                    type: integer
+                  obat_id:
+                    type: integer
+                  jumlah_penerimaan:
+                    type: integer
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+      required:
+        - name
+        - email
+        - password
+    Kategori_Obat:
+      type: object
+      properties:
+        id:
+          type: integer
+        nama_kategori:
+          type: string
+      required:
+        - nama_kategori
+    Obat:
+      type: object
+      properties:
+        id:
+          type: integer
+        nama_obat:
+          type: string
+        harga:
+          type: integer
+        gambar:
+          type: string
+        kategori_id:
+          type: integer
+      required:
+        - nama_obat
+        - harga
+        - gambar
+        - kategori_id
+    Stok:
+      type: object
+      properties:
+        id:
+          type: integer
+        obat_id:
+          type: integer
+        jumlah_stok:
+          type: integer
+      required:
+        - obat_id
+        - jumlah_stok
+    Transaksi:
+      type: object
+      properties:
+        id:
+          type: integer
+        obat_id:
+          type: integer
+        jumlah:
+          type: integer
+        total_harga:
+          type: integer
+      required:
+        - obat_id
+        - jumlah
+        - total_harga
+security:
+  - BearerAuth: []
